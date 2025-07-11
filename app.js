@@ -14,6 +14,10 @@ app.use(cors())
 // static file accessibility
 app.use('/uploads',express.static('uploads'))
 
+// Login/Register routes
+const userAuth=require('./routes/loginRoute')
+app.use('/user/Auth',userAuth)
+
 // connection to the db
 mongoose.connect(process.env.MONGO_URI)
 .then(()=> console.log("MongoDB Connected"))
