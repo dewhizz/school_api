@@ -62,7 +62,7 @@ const assignmentSchema=new Schema({
 // prepare for exports
 const User=mongoose.model('User',userSchema)
 const Teacher=mongoose.model('Teacher',teacherSchema)
-const Classroom=mongoose.model('Classroom',userSchema)
+const Classroom=mongoose.model('Classroom',classroomSchema)
 const Parent=mongoose.model('Parent',parentSchema)
 const Student=mongoose.model('Student',studentSchema)
 const Assignment=mongoose.model('Assignment',assignmentSchema)
