@@ -1,6 +1,6 @@
 const {Classroom}=require('../model/SchoolDB')
 
-// all classrooms
+// add classrooms
 exports.addClassroom=async(req,res)=>{
     try {
         // recieve data from the client
