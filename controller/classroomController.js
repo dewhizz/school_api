@@ -48,7 +48,7 @@ exports.updateClassroom=async(req,res)=>{
             {new:true}
         )
         if(!updateClassroom) return res.status(404).json({message:'classroom not found'})
-            res.status(201).json(updateClassroom)
+            res.status(200).json(updateClassroom)
     } catch (error) {
         res.status(500).json({message:error.message})
     }

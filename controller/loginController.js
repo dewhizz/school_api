@@ -32,7 +32,7 @@ exports.registerAdmin = async (req, res) => {
 // login user
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
+  // console.log(email, password);
   // check if the user email exsists
   const user = await User.findOne({ email });
     if(!user) {

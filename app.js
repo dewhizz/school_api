@@ -22,6 +22,11 @@ app.use('/api/user/Auth',userAuth)
 const classrooms=require('./routes/classroomRoutes')
 app.use('/api/classroom',classrooms)
 
+// teachers route
+const teachers=require('./routes/teacherRoutes')
+app.use('/api/teacher',teachers)
+
+
 // connection to the db
 mongoose.connect(process.env.MONGO_URI)
 .then(()=> console.log("MongoDB Connected"))
