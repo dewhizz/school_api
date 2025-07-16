@@ -6,6 +6,13 @@ const teacherController=require('../controller/teacherController')
 const { auth, authorizeRoles }=require('../middleware/auth')
 
 router.post('/',auth,authorizeRoles('admin'),teacherController.addTeacher)
+router.get(
+  "/",
+  auth,
+  authorizeRoles("admin", "teacher"),
+  teacherController.getMyClasses
+);
+
 router.get('/',teacherController.getAllTeachers)
 router.get("/:id",teacherController.getTeacherById)
 router.put("/:id",auth,authorizeRoles('admin','teacher'),teacherController.updatedTeacher);
