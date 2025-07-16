@@ -8,5 +8,8 @@ const { auth, authorizeRoles }=require('../middleware/auth')
 router.post('/',auth,authorizeRoles('admin'),teacherController.addTeacher)
 router.get('/',teacherController.getAllTeachers)
 router.get("/:id",teacherController.getTeacherById)
-router.put("/:id", teacherController.updatedTeacher);
+router.put("/:id",auth,authorizeRoles('admin','teacher'),teacherController.updatedTeacher);
+router.delete("/:id",auth,authorizeRoles("admin", "teacher"),teacherController.deleteTeacher);
+router.get("/",auth,authorizeRoles("admin", "teacher"),teacherController.getMyClasses);
+
 module.exports=router

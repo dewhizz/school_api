@@ -1,4 +1,4 @@
-const { Teacher, User } = require("../model/SchoolDB");
+const { Teacher, User, Classroom } = require("../model/SchoolDB");
 const bcrypt = require("bcrypt");
 // add teacher
 exports.addTeacher = async (req, res) => {
@@ -65,30 +65,75 @@ exports.getTeacherById = async (req, res) => {
 // update
 exports.updatedTeacher = async (req, res) => {
   try {
-    const updatedTeacher = await Teacher.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-console.log('incoming',updatedTeacher)
-    if (!updatedTeacher)
-      return res.status(404).json({ message: "teacher not found" });
-    
-    const updatedUser = await User.findOneAndUpdate(
-      { teacher: updatedTeacher._id },
-      { name: updatedTeacher.name,
-        email:updatedTeacher.email,
-        password:updatedTeacher.password
-       },
-       {new:true }
-       
-    );
-    console.log("incoming", updatedUser);
+    const teacherId=req.params.id
+    const userId=req.user.userId
+    const updateData=req.body
 
-      res
-        .status(200)
-        .json({ message: "teacher updated successfully ",teacher:updatedTeacher,User:updatedUser});
+    // check if the User exists
+    const existUser= await User.findById(userId)
+    if(!existUser) return res.status(404).json({message:'User not found'})
+
+    // check if the teacher exists
+    const existTeacher=await Teacher.findById(teacherId)
+    if(!existTeacher) return res.status(404).json({message:'Teacher not found'})
+      if(updateData.password && req.user.role=='admin'){
+        return res.status(403).json({message:"Permission denied"})
+      }
+
+      if(req.user.role=='teacher' && existTeacher.teacher.toString()!==teacherId){
+        return res.status(403).json({message:'Access denied'})
+      }
+      if(updateData.password){
+        const hashedPassword=await bcrypt.hash(updateData.password,10)
+        updateData.password=hashedPassword
+      }
+
+      const user=await User.findOne({teacher:teacherId})
+      const savedUser=await User.findByIdAndUpdate(
+        user._id,updateData,{new:true})
+      const savedTeacher=await Teacher.findByIdAndUpdate(teacherId,updateData,{new:true})
+      res.json({message:'Teacher Updated Successfully'})
   } catch (error) {
     res.status(500).json({message:error.message})
   }
 };
+
+// delete teacher
+exports.deleteTeacher=async(req,res)=>{
+ try {
+   // teacher id from params
+  const teacherId=res.params.id
+  // delete teacher
+  const deleteTeacher=await Teacher.findOneAndDelete(teacherId)
+  if(!deleteTeacher) return res.statu(404).json({message:'teacher not found'})
+  // unassign the teacher from any classrom
+await Classroom.updateMany(
+  {teacher:teacherId},
+  {$set:{teacher:null}})
+  res.status(200).json({message:'teacher deleted successfully'})
+
+ } catch (error) {
+      res.status(500).json({message:error.message})
+  }
+}
+
+// get Teachers Classes
+exports.getMyClasses=async(req,res)=>{
+  try {
+    // logged in user
+    const userId=req.user.userId
+    // find all classes for the teacher
+    const user=await User.findById(userId)
+    .populate('teacher')
+
+    // check if the user exists and is linked to a teacher
+    if(!user ||!user.teacher){
+      return res.status(500).json({ message: "Teacher not found" });
+    }
+      const classes=await Classroom.find({teacher:user.teacher._id})
+      .populate('students')
+      res.status(200).json(classes)
+  } catch (error) {
+    res.status(500).json({message:error.message})
+  }
+}
