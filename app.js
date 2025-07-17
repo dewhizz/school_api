@@ -26,6 +26,9 @@ app.use('/api/classroom',classrooms)
 const teachers=require('./routes/teacherRoutes')
 app.use('/api/teacher',teachers)
 
+// assignment route
+const assignment=require('./routes/assignmentRoute')
+app.use('/api/assignment',assignment)
 
 // connection to the db
 mongoose.connect(process.env.MONGO_URI)

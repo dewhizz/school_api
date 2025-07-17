@@ -1,4 +1,4 @@
-const { Teacher, User, Classroom } = require("../model/SchoolDB");
+const { Teacher, User, Classroom,Assignment } = require("../model/SchoolDB");
 const bcrypt = require("bcrypt");
 // add teacher
 exports.addTeacher = async (req, res) => {
@@ -137,3 +137,23 @@ exports.getMyClasses=async(req,res)=>{
     res.status(500).json({message:error.message})
   }
 }
+
+// get teachers assignment
+// includes classroom and teacher
+exports.getAllAssignment=async(req,res)=>{
+    try {
+        // logged in user
+        const userId=req.user.userId
+        const user=await User.findById(userId)
+        .populate('teacher')
+
+
+        const assignments=await Assignment.find({postedBy:user.teacher._id})
+        .populate('classroom','name gradeLevel classYear')
+        .populate('postedBy','name email phone')
+        res.status(200).json(assignments)
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+}
+
