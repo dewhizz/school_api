@@ -30,6 +30,11 @@ app.use('/api/teacher',teachers)
 const assignment=require('./routes/assignmentRoute')
 app.use('/api/assignment',assignment)
 
+// parent route
+const parent = require("./routes/parentRoute");
+app.use("/api/parent", parent);
+
+
 // connection to the db
 mongoose.connect(process.env.MONGO_URI)
 .then(()=> console.log("MongoDB Connected"))
