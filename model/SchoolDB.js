@@ -36,7 +36,7 @@ const classroomSchema=new Schema({
     gradeLevel:{type:String},
     classYear:Number,
     teacher:{type:mongoose.Schema.Types.ObjectId,ref:'Teacher',default:null},
-    students:{type:mongoose.Schema.Types.ObjectId,ref:'Student',default:null}
+    students:[{type:mongoose.Schema.Types.ObjectId,ref:'Student',default:null}]
 },{timestamps:true})
 
 // student schema
