@@ -40,6 +40,11 @@ const student = require("./routes/studentRoute");
 app.use("/api/student", student);
 
 
+// admin route
+const admin = require("./routes/adminRoute");
+app.use("/api/admin", admin);
+
+
 // connection to the db
 mongoose.connect(process.env.MONGO_URI)
 .then(()=> console.log("MongoDB Connected"))

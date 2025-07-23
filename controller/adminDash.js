@@ -5,13 +5,13 @@ exports.adminDashStats=async(req,res)=>{
     try {
         // we run all count operations parallel for better performance
         const [totalStudents,totalTeachers,totalParents,totalClassrooms,activeUsers]=
-        await Promise.all(
+        await Promise.all([
              Student.countDocuments(),
             Teacher.countDocuments(),
             Parent.countDocuments(),
             Classroom.countDocuments(),
             User.countDocuments({isActive:true})
-        )
+        ])
 
         // get the most recent students to be registered (sorted by newest)
         const recentStudents=await Student.find()
