@@ -115,10 +115,9 @@ exports.deleteStudent=async(req,res)=>{
         if (!deletedStudent)
           return res.status(404).json({ message: "Student not found" });
         // unassign teacher to a classroom
-        const student=req.classroom.student
         await Classroom.updateMany(
-            {student},
-            {$set:{student:null}}
+            {students:deletedStudent._id},
+            {$pull:{student:deletedStudent._id}}
         )
         res.status(200).json({ message: "Student deleted successfully" });
 
