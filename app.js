@@ -44,6 +44,9 @@ app.use("/api/student", student);
 const admin = require("./routes/adminRoute");
 app.use("/api/admin", admin);
 
+// teacherDash route
+const teacherDash = require("./routes/teacherDashRoute");
+app.use("/api/teacherDash", teacherDash);
 
 // connection to the db
 mongoose.connect(process.env.MONGO_URI)
