@@ -1,4 +1,4 @@
-const {user,Assignment,Classrooms, User, Classroom}=require('../model/SchoolDB')
+const {Assignment,User, Classroom}=require('../model/SchoolDB')
 
 // teachers dashboard
 exports.teacherDash=async(req,res)=>{
