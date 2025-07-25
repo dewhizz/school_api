@@ -48,6 +48,11 @@ app.use("/api/admin", admin);
 const teacherDash = require("./routes/teacherDashRoute");
 app.use("/api/teacherDash", teacherDash);
 
+// parentDash route
+const parentDash = require("./routes/parentDashRoute");
+app.use("/api/parentDash", parentDash);
+
+
 // connection to the db
 mongoose.connect(process.env.MONGO_URI)
 .then(()=> console.log("MongoDB Connected"))
