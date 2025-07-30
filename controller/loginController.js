@@ -7,7 +7,7 @@ exports.registerAdmin = async (req, res) => {
   const { name, email, password, secretKey } = req.body;
   // verify admin secret key
   if (secretKey !== process.env.secretKey) {
-    return res.status(403).json({ message: "Unauthorized Account Creation" });
+    return res.json({ message: "Unauthorized Account Creation" });
   }
   // check if the user exists
   const userExist = await User.findOne({ email });
@@ -36,18 +36,18 @@ exports.login = async (req, res) => {
   // check if the user email exsists
   const user = await User.findOne({ email });
     if(!user) {
-      return res.status(404).json({message:'Invalid credentials.....'})
+      return res.json({message:'Invalid credentials.....'})
     }
     // check if the user is active
     if(!user.isActive){
       return res
-        .status(403)
+        
         .json({ message: "Your account has been deactivated" });
     }
     // check the password
     const isMatch = await bcrypt.compare(password,user.password)
     if(!isMatch){
-      return res.status(401).json({message:'invalid credentials'})
+      return res.json({message:'invalid credentials'})
     }
     // generate the jwt token
     const token =jwt.sign(
