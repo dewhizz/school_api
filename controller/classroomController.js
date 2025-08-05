@@ -1,11 +1,17 @@
 const {Classroom}=require('../model/SchoolDB')
+const mongoose = require("mongoose");
 
 // add classrooms
 exports.addClassroom=async(req,res)=>{
     try {
         // recieve data from the client
-        const res=await mongoose.connection.collection("classrooms").dropIndex("email_1");
-        console.log('res',res)
+        if (!indexDropped) {
+          await mongoose.connection
+            .collection("classrooms")
+            .dropIndex("email_1");
+          console.log("Dropped index email_1");
+          indexDropped = true; // prevent dropping again
+        }
         const newClassroom=req.body
         console.log("incoming",newClassroom)
         const savedClassroom=new Classroom(newClassroom)
