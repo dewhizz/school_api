@@ -1,26 +1,25 @@
 const {Classroom}=require('../model/SchoolDB')
 const mongoose = require("mongoose");
+let indexDropped = false; // Declare here at module level
 
-// add classrooms
-exports.addClassroom=async(req,res)=>{
-    try {
-        // recieve data from the client
-        if (!indexDropped) {
-          await mongoose.connection
-            .collection("classrooms")
-            .dropIndex("email_1");
-          console.log("Dropped index email_1");
-          indexDropped = true; // prevent dropping again
-        }
-        const newClassroom=req.body
-        console.log("incoming",newClassroom)
-        const savedClassroom=new Classroom(newClassroom)
-        await savedClassroom.save()
-        res.json(savedClassroom)
-    } catch (error) {
-      res.status(500).json({message:error.message}) 
+
+exports.addClassroom = async (req, res) => {
+  try {
+    if (!indexDropped) {
+      await mongoose.connection.collection("classrooms").dropIndex("email_1");
+      console.log("Dropped index email_1");
+      indexDropped = true; // Mark that index is dropped to avoid dropping again
     }
-}
+
+    const newClassroom = req.body;
+    const savedClassroom = new Classroom(newClassroom);
+    await savedClassroom.save();
+
+    res.json(savedClassroom);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // fetching classrooms
 exports.getAllClassrooms= async(req,res)=>{
