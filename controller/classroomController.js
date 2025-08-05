@@ -1,31 +1,24 @@
 const {Classroom}=require('../model/SchoolDB')
-const mongoose = require("mongoose");
-let indexDropped = false; // Declare here at module level
 
-
-exports.addClassroom = async (req, res) => {
-  try {
-    if (!indexDropped) {
-      await mongoose.connection.collection("classrooms").dropIndex("email_1");
-      console.log("Dropped index email_1");
-      indexDropped = true; // Mark that index is dropped to avoid dropping again
+// add classrooms
+exports.addClassroom=async(req,res)=>{
+    try {
+        // recieve data from the client
+        const newClassroom=req.body
+        console.log("incoming",newClassroom)
+        const savedClassroom=new Classroom(newClassroom)
+        await savedClassroom.save()
+        res.json(savedClassroom)
+    } catch (error) {
+      res.status(500).json({message:error.message}) 
     }
-
-    const newClassroom = req.body;
-    const savedClassroom = new Classroom(newClassroom);
-    await savedClassroom.save();
-
-    res.json(savedClassroom);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+}
 
 // fetching classrooms
 exports.getAllClassrooms= async(req,res)=>{
     try {
         const classrooms = await Classroom.find()
-          .populate("teacher", "name  phone")
+          .populate("teacher", "name email phone")
           .populate("students", "name addmissionNumber");
           res.json(classrooms)
     } catch (error) {
@@ -37,7 +30,7 @@ exports.getAllClassrooms= async(req,res)=>{
 exports.getClassroomsById=async (req,res)=>{
     try {
        const classroom=await Classroom.findById(req.params.id)
-       .populate('teacher','name  phone')
+       .populate('teacher','name email phone')
        .populate('students','name addmissionNumber')
        if(!classroom) return res.status(404).json({message:"classroom not found"})
         res.status(200).json(classroom)
