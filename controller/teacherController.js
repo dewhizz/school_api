@@ -105,7 +105,7 @@ exports.deleteTeacher=async(req,res)=>{
   const teacherId=req.params.id
    console.log("Deleting teacher with ID:", teacherId);
   // delete teacher
-  const deleteTeacher=await Teacher.findOneAndDelete({teacherId})
+  const deleteTeacher=await Teacher.findByIdAndDelete({teacherId})
   console.log('inq',deleteTeacher)
   if(!deleteTeacher) return res.json({message:'teacher not found'})
   // unassign the teacher from any classrom
