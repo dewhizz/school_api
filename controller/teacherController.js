@@ -102,10 +102,12 @@ exports.updatedTeacher = async (req, res) => {
 exports.deleteTeacher=async(req,res)=>{
  try {
    // teacher id from params
-  const teacherId=res.params.id
+  const teacherId=req.params.id
+   console.log("Deleting teacher with ID:", teacherId);
   // delete teacher
-  const deleteTeacher=await Teacher.findOneAndDelete(teacherId)
-  if(!deleteTeacher) return res.statu(404).json({message:'teacher not found'})
+  const deleteTeacher=await Teacher.findOneAndDelete({teacherId})
+  console.log('inq',deleteTeacher)
+  if(!deleteTeacher) return res.json({message:'teacher not found'})
   // unassign the teacher from any classrom
 await Classroom.updateMany(
   {teacher:teacherId},

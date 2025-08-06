@@ -13,7 +13,7 @@ router.get("/myassignments",auth,teacherController.getAllAssignment);
 router.get('/',teacherController.getAllTeachers)
 router.get("/:id",teacherController.getTeacherById)
 router.put("/:id",auth,authorizeRoles('admin','teacher'),teacherController.updatedTeacher);
-router.delete("/:id",auth,authorizeRoles("admin", "teacher"),teacherController.deleteTeacher);
+router.delete("/:id",auth,authorizeRoles("admin"),teacherController.deleteTeacher);
 
 
 module.exports=router
