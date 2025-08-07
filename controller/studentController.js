@@ -69,7 +69,7 @@ exports.getAllStudents=async(req,res)=>{
 
      res
        .status(200)
-       .json({ message: "Students fetched successfully", student });
+       .json({ message: "Students fetched successfully" }, student);
    } catch (error) {
     res.status(500).json({message:error.message})
    }
