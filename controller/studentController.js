@@ -63,13 +63,13 @@ exports.addStudent=async(req,res)=>{
 // get all
 exports.getAllStudents=async(req,res)=>{
    try {
-     const student = await Student.find()
+     const students = await Student.find()
        .populate("classroom",'gradeLevel classYear teacher')
        .populate("parent",'name');
 
      res
        .status(200)
-       .json({ message: "Students fetched successfully" }, student);
+       .json(students);
    } catch (error) {
     res.status(500).json({message:error.message})
    }
