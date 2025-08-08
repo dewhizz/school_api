@@ -64,8 +64,8 @@ exports.addStudent=async(req,res)=>{
 exports.getAllStudents=async(req,res)=>{
    try {
      const students = await Student.find()
-       .populate("classroom",'gradeLevel classYear teacher')
-       .populate("parent",'name');
+       .populate("classroom")
+       .populate("parent");
 
      res
        .status(200)
